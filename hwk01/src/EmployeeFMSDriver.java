@@ -2,6 +2,7 @@ import java.io.FileInputStream;
 import java.io.*;
 import java.util.Scanner;
 
+
 public class EmployeeFMSDriver implements EmployeeCRUD {
 
     static final String EMPLOYEE_FILENAME = "employee.csv";
@@ -9,13 +10,14 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
 
     /**
      * Adds the employee to the system
+     *
      * @param employee
      */
-    public void create ( final Employee employee){
+    public void create(final Employee employee) {
         boolean found = false;
         try {
             Scanner in = new Scanner(new FileInputStream(EMPLOYEE_FILENAME));
-            while (in.hasNextLine()){
+            while (in.hasNextLine()) {
                 String line = in.nextLine();
                 String data[] = line.split(",");
                 int id = Integer.parseInt(data[0]);
@@ -25,13 +27,12 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
                 }
             }
             in.close();
+        } catch (FileNotFoundException ex) {
+            //ignoring
         }
-        catch (FileNotFoundException ex){
-                //ignoring
-            }
         if (found)
             System.out.println("Employee wiht same id already exits!");
-        else{
+        else {
             try {
                 PrintStream out = new PrintStream(new FileOutputStream(EMPLOYEE_FILENAME, true));
                 out.println(employee);
@@ -44,13 +45,14 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
 
     /**
      * Returns the employee if found
+     *
      * @param id the id of the employee to be returned
      * @return the employee object (null if not found)
      */
-    public Employee read( int id){
+    public Employee read(int id) {
         try {
             Scanner in = new Scanner(new FileInputStream(EMPLOYEE_FILENAME));
-            while (in.hasNextLine()){
+            while (in.hasNextLine()) {
                 String line = in.nextLine();
                 String data[] = line.split(",");
                 int key = Integer.parseInt(data[0]);
@@ -63,8 +65,7 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
                 }
             }
             in.close();
-        }
-        catch (FileNotFoundException ex){
+        } catch (FileNotFoundException ex) {
             // ignoring...
         }
         return null;
@@ -72,10 +73,11 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
 
     /**
      * Updates the employee information
-     * @param id the id of the employee to be updated
+     *
+     * @param id       the id of the employee to be updated
      * @param employee the employee object
      */
-    public void update ( int id, final Employee employee){
+    public void update(int id, final Employee employee) {
         boolean found = false;
         int lineId;
         File inFile = new File(EMPLOYEE_FILENAME);
@@ -83,33 +85,32 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
         try {
             Scanner in = new Scanner(new FileInputStream(EMPLOYEE_FILENAME));
             PrintStream out = new PrintStream(new FileOutputStream(EMPLOYEE_FILENAME_TEMP, true));
-            while (in.hasNextLine()){
+            while (in.hasNextLine()) {
                 String line = in.nextLine();
                 String data[] = line.split(",");
                 lineId = Integer.parseInt(data[0]);
                 if (lineId == id) {
                     found = true;
                     out.println(employee);
-                }
-                else{
+                } else {
                     out.println(line);
                 }
             }
             in.close();
             out.close();
-            if (found == false){
+            if (found == false) {
                 System.out.println("The employee id entered to update does not exist.");
             }
             inFile.delete();
             outFile.renameTo(inFile);
-        }
-        catch (FileNotFoundException ex){
+        } catch (FileNotFoundException ex) {
             //ignoring
         }
     }
 
     /**
      * Removes the employee specified by id
+     *
      * @param id the id of the employee to be deleted
      */
 
@@ -120,14 +121,13 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
         try {
             Scanner in = new Scanner(new FileInputStream(EMPLOYEE_FILENAME));
             PrintStream out = new PrintStream(new FileOutputStream(EMPLOYEE_FILENAME_TEMP, true));
-            while (in.hasNextLine()){
+            while (in.hasNextLine()) {
                 String line = in.nextLine();
                 String data[] = line.split(",");
                 lineId = Integer.parseInt(data[0]);
                 if (lineId == id) {
                     continue;
-                }
-                else{
+                } else {
                     out.println(line);
                 }
             }
@@ -135,41 +135,68 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
             out.close();
             inFile.delete();
             outFile.renameTo(inFile);
-        }
-        catch (FileNotFoundException ex){
+        } catch (FileNotFoundException ex) {
             //ignoring
         }
     }
 
     public static void main(String args[]) {
-        boolean sentinel = true;
-        Scanner scnUsrIn = new Scanner(System.in);
+
         int usrInput;
+        boolean sentinel = true;
+        EmployeeFMSDriver impl = new EmployeeFMSDriver();
+        Scanner scnUsrIn = new Scanner(System.in);
+
         System.out.println("Hello welcome to the .csv FMS\n");
-        while(sentinel) {
-            System.out.println("Enter 1 to CREATE employee.\nEnter 2 to READ employee info.\nEnter 3 to UPDATE employee info.\nEnter 4 to DELETE employee\n");
+
+        while (sentinel) {
+            System.out.println("What would you like to do?\nEnter 1 to CREATE employee.\n" +
+                    "Enter 2 to READ employee info.\nEnter 3 to UPDATE employee info.\nEnter 4 to DELETE employee.\n" +
+                    "Enter 5 to QUIT.\n");
             System.out.print("Your input: ");
             usrInput = scnUsrIn.nextInt();
-            if(usrInput == 1){
-               int id;
-               String empName, empDep;
-               System.out.print("Enter unique employee ID: ");
-               id = scnUsrIn.nextInt();
-               System.out.print("Enter unique employee ID: ");
 
+            if (usrInput == 1) {
+                int id;
+                String empName, empDep;
+                System.out.print("\nEnter unique integer employee ID: ");
+                id = scnUsrIn.nextInt();
+                System.out.print("Enter employee NAME: ");
+                empName = scnUsrIn.next();
+                System.out.print("Enter employee DEPARTMENT: ");
+                empDep = scnUsrIn.next();
+                Employee newEmp = new Employee(id,empName,empDep);
+                impl.create(newEmp);
             }
+            else if (usrInput == 2){
+                int id;
+                String empStr;
+                System.out.print("\nEnter the employee ID number to read: ");
+                id = scnUsrIn.nextInt();
+                System.out.println("\n"+impl.read(id)+"\n");
+            }
+            else if (usrInput == 3){
+                int id;
+                String empName, empDep;
+                System.out.print("\nEnter the employee ID number to update: ");
+                id = scnUsrIn.nextInt();
+                System.out.print("Enter the new employee NAME: ");
+                empName = scnUsrIn.next();
+                System.out.print("Enter the new employee DEPARTMENT: ");
+                empDep = scnUsrIn.next();
+                Employee newEmp = new Employee(id,empName,empDep);
+                impl.update(id,newEmp);
+            }/*
+            else if (usrInput == 4){
 
-
-            sentinel = false;
+            }*/
+            else if (usrInput == 5) {
+                sentinel = false;
+                break;
+            } else{
+                System.out.println("Please enter an integer from 1 to 5.");
+                break;
+            }
         }
-
-
-
-
-        /*EmployeeFMSDriver impl = new EmployeeFMSDriver();
-        Employee mrJava = new Employee(6, "mrJava", "school");
-        Employee mrJava2 = new Employee(2, "updated", "Yay");
-        impl.create(mrJava);
-        impl.delete(2);*/
     }
 }
