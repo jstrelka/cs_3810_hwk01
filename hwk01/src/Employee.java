@@ -4,18 +4,23 @@
  * @author Thyago Mota
  * @date Aug-16-2018
  */
+
+// Employee Class
 public class Employee {
 
+    // Employee member variables
     private int    id;
     private String name;
     private String department;
 
+    // Employee Constructor
     public Employee(int id, String name, String department) {
         this.id = id;
         this.name = name;
         this.department = department;
     }
 
+    // Employee ID Getter/Setters
     public Integer getId() {
         return id;
     }
@@ -24,6 +29,7 @@ public class Employee {
         this.id = id;
     }
 
+    // Employee NAME Getter/Setters
     public String getName() {
         return name;
     }
@@ -32,6 +38,7 @@ public class Employee {
         this.name = name;
     }
 
+    // Employee DEPARTMENT Getter/Setters
     public String getDepartment() {
         return department;
     }
@@ -40,6 +47,7 @@ public class Employee {
         this.department = department;
     }
 
+    // Employee toString() for .csv output
     @Override
     public String toString() {
         return id + "," + name + "," + department;
