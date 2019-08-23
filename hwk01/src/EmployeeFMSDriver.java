@@ -79,6 +79,8 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
     public void update ( int id, final Employee employee){
         boolean found = false;
         int lineId;
+        File inFile = new File(EMPLOYEE_FILENAME);
+        File outFile = new File(EMPLOYEE_FILENAME_TEMP);
         try {
             Scanner in = new Scanner(new FileInputStream(EMPLOYEE_FILENAME));
             PrintStream out = new PrintStream(new FileOutputStream(EMPLOYEE_FILENAME_TEMP, true));
@@ -99,8 +101,6 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
             if (found == false){
                 System.out.println("The employee id entered to update does not exist.");
             }
-            File inFile = new File(EMPLOYEE_FILENAME);
-            File outFile = new File(EMPLOYEE_FILENAME_TEMP);
             inFile.delete();
             outFile.renameTo(inFile);
         }
@@ -115,7 +115,31 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
      */
 
     public void delete(int id) {
-        System.out.println("hello World!!\n");
+        int lineId;
+        File inFile = new File(EMPLOYEE_FILENAME);
+        File outFile = new File(EMPLOYEE_FILENAME_TEMP);
+        try {
+            Scanner in = new Scanner(new FileInputStream(EMPLOYEE_FILENAME));
+            PrintStream out = new PrintStream(new FileOutputStream(EMPLOYEE_FILENAME_TEMP, true));
+            while (in.hasNextLine()){
+                String line = in.nextLine();
+                String data[] = line.split(",");
+                lineId = Integer.parseInt(data[0]);
+                if (lineId == id) {
+                    continue;
+                }
+                else{
+                    out.println(line);
+                }
+            }
+            in.close();
+            out.close();
+            inFile.delete();
+            outFile.renameTo(inFile);
+        }
+        catch (FileNotFoundException ex){
+            //ignoring
+        }
     }
 
     public static void main(String args[]) {
@@ -123,6 +147,6 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
         Employee mrJava = new Employee(6, "mrJava", "school");
         Employee mrJava2 = new Employee(2, "updated", "Yay");
         impl.create(mrJava);
-        impl.update(2,mrJava2);
+        impl.delete(2);
     }
 }
