@@ -1,5 +1,46 @@
+import java.io.FileInputStream;
+import java.io.*;
+import java.util.Scanner;
+
 public class EmployeeFMSDriver implements EmployeeCRUD {
-    public void create ( final Employee employee){}
+
+    static final String EMPLOYEE_FILENAME = "employee.csv";
+    static final String EMPLOYEE_FILENAME_TEMP = "employee.csv";
+
+    /**
+     * Adds the employee to the system
+     * @param employee
+     */
+    public void create ( final Employee employee){
+        boolean found = false;
+        try {
+            Scanner in = new Scanner(new FileInputStream(EMPLOYEE_FILENAME));
+            while (in.hasNextLine()){
+                String line = in.nextLine();
+                String data[] = line.split(",");
+                int id = Integer.parseInt(data[0]);
+                if (id == employee.getId()) {
+                    found = true;
+                    break;
+                }
+            }
+            in.close();
+        }
+        catch (FileNotFoundException ex){
+                //ignoring
+            }
+        if (found)
+            System.out.println("Employee wiht same id already exits!");
+        else{
+            try {
+                PrintStream out = new PrintStream(new FileOutputStream(EMPLOYEE_FILENAME, true));
+                out.println(employee);
+                out.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * Returns the employee if found
@@ -7,8 +48,26 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
      * @return the employee object (null if not found)
      */
     public Employee read( int id){
-        Employee mrJava2 = new Employee(5,"me", "hi");
-        return mrJava2;
+        try {
+            Scanner in = new Scanner(new FileInputStream(EMPLOYEE_FILENAME));
+            while (in.hasNextLine()){
+                String line = in.nextLine();
+                String data[] = line.split(",");
+                int key = Integer.parseInt(data[0]);
+                if (id == key) {
+                    String name = data[1];
+                    String dep = data[2];
+                    Employee employee = new Employee(id, name, dep);
+                    in.close();
+                    return employee;
+                }
+            }
+            in.close();
+        }
+        catch (FileNotFoundException ex){
+            // ignoring...
+        }
+        return null;
     }
 
     /**
@@ -16,7 +75,34 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
      * @param id the id of the employee to be updated
      * @param employee the employee object
      */
-    public void update ( int id, final Employee employee){}
+    public void update ( int id, final Employee employee){
+        boolean found = false;
+        int lineId;
+        try {
+            Scanner in = new Scanner(new FileInputStream(EMPLOYEE_FILENAME));
+            PrintStream out = new PrintStream(new FileOutputStream(EMPLOYEE_FILENAME_TEMP, true));
+            while (in.hasNextLine()){
+                String line = in.nextLine();
+                String data[] = line.split(",");
+                lineId = Integer.parseInt(data[0]);
+                if (lineId == id) {
+                    found = true;
+                    out.println(employee);
+                }
+                else{
+                    out.println(line);
+                }
+            }
+            in.close();
+            out.close();
+            if (found == false){
+                System.out.println("The employee id entered to update does not exist.");
+            }
+        }
+        catch (FileNotFoundException ex){
+            //ignoring
+        }
+    }
 
     /**
      * Removes the employee specified by id
@@ -28,8 +114,9 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
     }
 
     public static void main(String args[]) {
-        delete(5);
+        EmployeeFMSDriver impl = new EmployeeFMSDriver();
         Employee mrJava = new Employee(6, "mrJava", "school");
-
+        impl.create(mrJava);
+        impl.read(6);
     }
 }
