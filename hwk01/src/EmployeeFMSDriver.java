@@ -1,7 +1,6 @@
 import java.io.FileInputStream;
 import java.io.*;
 import java.util.Scanner;
-import java.nio.file.*;
 
 public class EmployeeFMSDriver implements EmployeeCRUD {
 
@@ -143,10 +142,34 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
     }
 
     public static void main(String args[]) {
-        EmployeeFMSDriver impl = new EmployeeFMSDriver();
+        boolean sentinel = true;
+        Scanner scnUsrIn = new Scanner(System.in);
+        int usrInput;
+        System.out.println("Hello welcome to the .csv FMS\n");
+        while(sentinel) {
+            System.out.println("Enter 1 to CREATE employee.\nEnter 2 to READ employee info.\nEnter 3 to UPDATE employee info.\nEnter 4 to DELETE employee\n");
+            System.out.print("Your input: ");
+            usrInput = scnUsrIn.nextInt();
+            if(usrInput == 1){
+               int id;
+               String empName, empDep;
+               System.out.print("Enter unique employee ID: ");
+               id = scnUsrIn.nextInt();
+               System.out.print("Enter unique employee ID: ");
+
+            }
+
+
+            sentinel = false;
+        }
+
+
+
+
+        /*EmployeeFMSDriver impl = new EmployeeFMSDriver();
         Employee mrJava = new Employee(6, "mrJava", "school");
         Employee mrJava2 = new Employee(2, "updated", "Yay");
         impl.create(mrJava);
-        impl.delete(2);
+        impl.delete(2);*/
     }
 }
