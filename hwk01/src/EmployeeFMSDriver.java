@@ -147,10 +147,10 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
         EmployeeFMSDriver impl = new EmployeeFMSDriver();
         Scanner scnUsrIn = new Scanner(System.in);
 
-        System.out.println("Hello welcome to the .csv FMS\n");
+        System.out.println("Hello welcome to the .csv FMS");
 
         while (sentinel) {
-            System.out.println("What would you like to do?\nEnter 1 to CREATE employee.\n" +
+            System.out.println("\nWhat would you like to do?\nEnter 1 to CREATE employee.\n" +
                     "Enter 2 to READ employee info.\nEnter 3 to UPDATE employee info.\nEnter 4 to DELETE employee.\n" +
                     "Enter 5 to QUIT.\n");
             System.out.print("Your input: ");
@@ -173,7 +173,7 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
                 String empStr;
                 System.out.print("\nEnter the employee ID number to read: ");
                 id = scnUsrIn.nextInt();
-                System.out.println("\n"+impl.read(id)+"\n");
+                System.out.println("\nEmployee read info: "+impl.read(id)+"\n");
             }
             else if (usrInput == 3){
                 int id;
