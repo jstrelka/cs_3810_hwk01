@@ -1,11 +1,12 @@
 import java.io.FileInputStream;
 import java.io.*;
 import java.util.Scanner;
+import java.nio.file.*;
 
 public class EmployeeFMSDriver implements EmployeeCRUD {
 
     static final String EMPLOYEE_FILENAME = "employee.csv";
-    static final String EMPLOYEE_FILENAME_TEMP = "employee.csv";
+    static final String EMPLOYEE_FILENAME_TEMP = "employeeTemp.csv";
 
     /**
      * Adds the employee to the system
@@ -98,6 +99,10 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
             if (found == false){
                 System.out.println("The employee id entered to update does not exist.");
             }
+            File inFile = new File(EMPLOYEE_FILENAME);
+            File outFile = new File(EMPLOYEE_FILENAME_TEMP);
+            inFile.delete();
+            outFile.renameTo(inFile);
         }
         catch (FileNotFoundException ex){
             //ignoring
@@ -116,7 +121,8 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
     public static void main(String args[]) {
         EmployeeFMSDriver impl = new EmployeeFMSDriver();
         Employee mrJava = new Employee(6, "mrJava", "school");
+        Employee mrJava2 = new Employee(2, "updated", "Yay");
         impl.create(mrJava);
-        impl.read(6);
+        impl.update(2,mrJava2);
     }
 }
