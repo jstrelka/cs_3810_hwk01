@@ -186,16 +186,18 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
                 empDep = scnUsrIn.next();
                 Employee newEmp = new Employee(id,empName,empDep);
                 impl.update(id,newEmp);
-            }/*
+            }
             else if (usrInput == 4){
-
-            }*/
+                int id;
+                System.out.print("\nEnter employee ID to delete: ");
+                id = scnUsrIn.nextInt();
+                impl.delete(id);
+            }
             else if (usrInput == 5) {
                 sentinel = false;
                 break;
             } else{
                 System.out.println("Please enter an integer from 1 to 5.");
-                break;
             }
         }
     }
