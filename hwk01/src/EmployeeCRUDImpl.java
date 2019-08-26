@@ -6,14 +6,33 @@
  * @date Aug-23-2019
  */
 
-// Import Libraries
 
+/*
+* REFLECTION
+* Sorting employee records by ID would be beneficial to the CRUD operations efficiency.
+* The Create method would not have to loop the contents of the entire csv file in search
+* of a matching Employee ID. Instead the Scanner could loop the contents of the file
+* the new Employee ID was less than the ID of the line in the csv and break the loop
+* early. The same idea could be applied to the READ, CREATE and DELETE methods.
+*
+* Another alternative to using a csv file would be to limit the length of all
+* Employee attributes to a specified number of chars padded with spaces to make all
+* fields and lines an identical number of chars in length and save as a standard
+* text file. The program could then quickly search using binary search for a specified
+* Employee ID and update the line as it resides within the file. This would save
+* the cost of creating a temp csv file for manipulation.
+* */
+
+
+
+
+// Import Libraries
 import java.io.FileInputStream;
 import java.io.*;
 import java.util.Scanner;
 
-// EmployeeFMSDriver class
-public class EmployeeFMSDriver implements EmployeeCRUD {
+// EmployeeCRUDImpl class
+public class EmployeeCRUDImpl implements EmployeeCRUD {
 
     // Create CONSTANTS for .csv file names.
     static final String EMPLOYEE_FILENAME = "employee.csv";
@@ -26,6 +45,7 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
      * @param employee
      * @return
      * */
+    @Override
     public void create(final Employee employee) {
         // Initialize local variables
         boolean found = false;
@@ -73,6 +93,7 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
      * @param id the id of the employee to be returned
      * @return the employee object (null if not found)
      */
+    @Override
     public Employee read(int id) {
         try {
             // Create Scanner for file input
@@ -105,6 +126,7 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
      * @param id       the id of the employee to be updated
      * @param employee the employee object
      */
+    @Override
     public void update(int id, final Employee employee) {
         // Initialize local variables
         boolean found = false;
@@ -148,9 +170,11 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
      *
      * @param id the id of the employee to be deleted
      */
+    @Override
     public void delete(int id) {
         // Initialize local variables
         int lineId;
+        Boolean found = false;
         // Create File objects for file manipulation
         File inFile = new File(EMPLOYEE_FILENAME);
         File outFile = new File(EMPLOYEE_FILENAME_TEMP);
@@ -165,10 +189,16 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
                 lineId = Integer.parseInt(data[0]);
                 // Check for ID match
                 if (lineId == id) {
+                    found = true;
                     continue;
                 } else {
                     out.println(line);
                 }
+            }
+            if (!found){
+                System.out.println("\nThe employee id did not exist.");
+            }else {
+                System.out.println("\nEmployee successfully deleted.");
             }
             in.close();
             out.close();
@@ -179,6 +209,10 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
         }
     }
 
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+    }
+
     /**
      * Main driver method for EmployeeCRUD interface.
      * */
@@ -186,7 +220,7 @@ public class EmployeeFMSDriver implements EmployeeCRUD {
         // Initialize local variables
         int usrInput;
         boolean sentinel = true;
-        EmployeeFMSDriver impl = new EmployeeFMSDriver();
+        EmployeeCRUDImpl impl = new EmployeeCRUDImpl();
         Scanner scnUsrIn = new Scanner(System.in);
         // Greet User
         System.out.println("Hello welcome to the .csv FMS");
