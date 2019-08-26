@@ -259,29 +259,39 @@ public class EmployeeCRUDImpl implements EmployeeCRUD {
                 // READ
                 else if (usrInput.equals("2")) {
                     // Initialize local variables
-                    int id;
-                    String empStr;
-                    // Prompt user input for ID
-                    System.out.print("\nEnter the employee ID number to read: ");
-                    id = scnUsrIn.nextInt();
-                    // Print employee info to user if found
-                    System.out.println("\nEmployee read info: " + impl.read(id) + "\n");
+                    String id;
+                    while(true) {
+                        // Prompt user input for ID
+                        System.out.print("\nEnter the employee ID number to read: ");
+                        id = scnUsrIn.next();
+                        if (isNumeric(id)) {
+                            // Print employee info to user if found
+                            System.out.println("\nEmployee read info: " + impl.read(Integer.parseInt(id)) + "\n");
+                            break;
+                        }
+                        System.out.println("Invalid input please enter an integer for employee id.");
+                    }
                 }
                 // UPDATE
                 else if (usrInput.equals("3")) {
                     // Initialize local variables
-                    int id;
-                    String empName, empDep;
+                    String id, empName, empDep;
                     // Prompt user for employee info
-                    System.out.print("\nEnter the employee ID number to update: ");
-                    id = scnUsrIn.nextInt();
+                    while(true) {
+                        System.out.print("\nEnter the employee ID number to update: ");
+                        id = scnUsrIn.next();
+                        if(isNumeric(id)){
+                            break;
+                        }
+                        System.out.println("\nInvalid input please enter an integer for employee id.");
+                    }
                     System.out.print("Enter the new employee NAME: ");
                     empName = scnUsrIn.next();
                     System.out.print("Enter the new employee DEPARTMENT: ");
                     empDep = scnUsrIn.next();
                     // Create and update new employee info
-                    Employee newEmp = new Employee(id, empName, empDep);
-                    impl.update(id, newEmp);
+                    Employee newEmp = new Employee(Integer.parseInt(id), empName, empDep);
+                    impl.update(Integer.parseInt(id), newEmp);
                 }
                 // DELETE
                 else if (usrInput.equals("4")) {
