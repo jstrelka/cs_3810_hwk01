@@ -218,7 +218,7 @@ public class EmployeeCRUDImpl implements EmployeeCRUD {
      * */
     public static void main(String args[]) {
         // Initialize local variables
-        int usrInput;
+        String usrInput;
         boolean sentinel = true;
         EmployeeCRUDImpl impl = new EmployeeCRUDImpl();
         Scanner scnUsrIn = new Scanner(System.in);
@@ -232,70 +232,75 @@ public class EmployeeCRUDImpl implements EmployeeCRUD {
                     "Enter 5 to QUIT.\n");
             // Prompt user input
             System.out.print("Your input: ");
-            usrInput = scnUsrIn.nextInt();
-
-            // Check user input for flow control
-            // CREATE
-            if (usrInput == 1) {
-                // Initialize local variables
-                int id;
-                String empName, empDep;
-                // Get User input for employee info
-                System.out.print("\nEnter unique integer employee ID: ");
-                id = scnUsrIn.nextInt();
-                System.out.print("Enter employee NAME: ");
-                empName = scnUsrIn.next();
-                System.out.print("Enter employee DEPARTMENT: ");
-                empDep = scnUsrIn.next();
-                //Create and write new employee
-                Employee newEmp = new Employee(id, empName, empDep);
-                impl.create(newEmp);
+            usrInput = scnUsrIn.next();
+            if (isNumeric(usrInput)) {
+                // Check user input for flow control
+                // CREATE
+                if (usrInput.equals("1")) {
+                    // Initialize local variables
+                    int id;
+                    String empName, empDep;
+                    // Get User input for employee info
+                    System.out.print("\nEnter unique integer employee ID: ");
+                    id = scnUsrIn.nextInt();
+                    System.out.print("Enter employee NAME: ");
+                    empName = scnUsrIn.next();
+                    System.out.print("Enter employee DEPARTMENT: ");
+                    empDep = scnUsrIn.next();
+                    //Create and write new employee
+                    Employee newEmp = new Employee(id, empName, empDep);
+                    impl.create(newEmp);
+                }
+                // READ
+                else if (usrInput.equals("2")) {
+                    // Initialize local variables
+                    int id;
+                    String empStr;
+                    // Prompt user input for ID
+                    System.out.print("\nEnter the employee ID number to read: ");
+                    id = scnUsrIn.nextInt();
+                    // Print employee info to user if found
+                    System.out.println("\nEmployee read info: " + impl.read(id) + "\n");
+                }
+                // UPDATE
+                else if (usrInput.equals("3")) {
+                    // Initialize local variables
+                    int id;
+                    String empName, empDep;
+                    // Prompt user for employee info
+                    System.out.print("\nEnter the employee ID number to update: ");
+                    id = scnUsrIn.nextInt();
+                    System.out.print("Enter the new employee NAME: ");
+                    empName = scnUsrIn.next();
+                    System.out.print("Enter the new employee DEPARTMENT: ");
+                    empDep = scnUsrIn.next();
+                    // Create and update new employee info
+                    Employee newEmp = new Employee(id, empName, empDep);
+                    impl.update(id, newEmp);
+                }
+                // DELETE
+                else if (usrInput.equals("4")) {
+                    // Initialize local variables
+                    int id;
+                    // Prompt user for ID
+                    System.out.print("\nEnter employee ID to delete: ");
+                    id = scnUsrIn.nextInt();
+                    // Delete employee
+                    impl.delete(id);
+                }
+                // QUIT
+                else if (usrInput.equals("5")) {
+                    sentinel = false;
+                    break;
+                }
+                // INVALID INPUT
+                else {
+                    System.out.println("Invalid input please enter an integer from 1 to 5.");
+                }
             }
-            // READ
-            else if (usrInput == 2) {
-                // Initialize local variables
-                int id;
-                String empStr;
-                // Prompt user input for ID
-                System.out.print("\nEnter the employee ID number to read: ");
-                id = scnUsrIn.nextInt();
-                // Print employee info to user if found
-                System.out.println("\nEmployee read info: " + impl.read(id) + "\n");
-            }
-            // UPDATE
-            else if (usrInput == 3) {
-                // Initialize local variables
-                int id;
-                String empName, empDep;
-                // Prompt user for employee info
-                System.out.print("\nEnter the employee ID number to update: ");
-                id = scnUsrIn.nextInt();
-                System.out.print("Enter the new employee NAME: ");
-                empName = scnUsrIn.next();
-                System.out.print("Enter the new employee DEPARTMENT: ");
-                empDep = scnUsrIn.next();
-                // Create and update new employee info
-                Employee newEmp = new Employee(id, empName, empDep);
-                impl.update(id, newEmp);
-            }
-            // DELETE
-            else if (usrInput == 4) {
-                // Initialize local variables
-                int id;
-                // Prompt user for ID
-                System.out.print("\nEnter employee ID to delete: ");
-                id = scnUsrIn.nextInt();
-                // Delete employee
-                impl.delete(id);
-            }
-            // QUIT
-            else if (usrInput == 5) {
-                sentinel = false;
-                break;
-            }
-            // INVALID INPUT
-            else {
-                System.out.println("Please enter an integer from 1 to 5.");
+            // INPUT was not numeric
+            else{
+                System.out.println("Invalid input please enter an Integer from 1 to 5.");
             }
         }
     }
