@@ -238,17 +238,22 @@ public class EmployeeCRUDImpl implements EmployeeCRUD {
                 // CREATE
                 if (usrInput.equals("1")) {
                     // Initialize local variables
-                    int id;
-                    String empName, empDep;
+                    String id, empName, empDep;
                     // Get User input for employee info
-                    System.out.print("\nEnter unique integer employee ID: ");
-                    id = scnUsrIn.nextInt();
+                    while(true){
+                        System.out.print("\nEnter unique integer employee ID: ");
+                        id = scnUsrIn.next();
+                        if(isNumeric(id)){
+                            break;
+                        }
+                        System.out.println("\nInvalid input please enter a unique integer id.");
+                    }
                     System.out.print("Enter employee NAME: ");
                     empName = scnUsrIn.next();
                     System.out.print("Enter employee DEPARTMENT: ");
                     empDep = scnUsrIn.next();
                     //Create and write new employee
-                    Employee newEmp = new Employee(id, empName, empDep);
+                    Employee newEmp = new Employee(Integer.parseInt(id), empName, empDep);
                     impl.create(newEmp);
                 }
                 // READ
