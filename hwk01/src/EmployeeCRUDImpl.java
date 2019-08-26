@@ -225,7 +225,7 @@ public class EmployeeCRUDImpl implements EmployeeCRUD {
         // Greet User
         System.out.println("Hello welcome to the .csv FMS");
         // Start User Interface
-        while (sentinel) {
+        while(true) {
             // Print options menu
             System.out.println("\nWhat would you like to do?\nEnter 1 to CREATE employee.\n" +
                     "Enter 2 to READ employee info.\nEnter 3 to UPDATE employee info.\nEnter 4 to DELETE employee.\n" +
@@ -296,16 +296,21 @@ public class EmployeeCRUDImpl implements EmployeeCRUD {
                 // DELETE
                 else if (usrInput.equals("4")) {
                     // Initialize local variables
-                    int id;
+                    String id;
                     // Prompt user for ID
-                    System.out.print("\nEnter employee ID to delete: ");
-                    id = scnUsrIn.nextInt();
-                    // Delete employee
-                    impl.delete(id);
+                    while(true){
+                        System.out.print("\nEnter employee ID to delete: ");
+                        id = scnUsrIn.next();
+                        if(isNumeric(id)) {
+                            // Delete employee
+                            impl.delete(Integer.parseInt(id));
+                            break;
+                        }
+                        System.out.println("Invalid input please enter an integer for employee id.");
+                    }
                 }
                 // QUIT
                 else if (usrInput.equals("5")) {
-                    sentinel = false;
                     break;
                 }
                 // INVALID INPUT
